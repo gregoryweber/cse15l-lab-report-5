@@ -1,9 +1,11 @@
-CPATH='.:lib/hamcrest-core-1.3.jar:lib/junit-4.13.2.jar'
+# WINDOWS CPATH
+CPATH='.;lib/hamcrest-core-1.3.jar;lib/junit-4.13.2.jar'
 
-grep "@Test" TestListExamples.java  > grep-results.txt
-TOTAL_AMOUNT=`wc -l grep-results.txt | awk '{$1}'`
+# MAC CPATH
+# CPATH='.:lib/hamcrest-core-1.3.jar:lib/junit-4.13.2.jar'
 
-# TOTAL_AMOUNT=2
+grep "@Test" TestListExamples.java | wc -l > failure-amount.txt
+TOTAL_AMOUNT=`cat failure-amount.txt`
 
 rm -rf student-submission
 git clone $1 student-submission
@@ -60,6 +62,27 @@ then
     echo "Printing out JUnit output since there were errors!"
     cat test-results.txt
 fi
+
 echo ""
-echo "$correct/$TOTAL_AMOUNT is the final score."
-echo "" 
+echo "-----------------------------------------------------------------"
+
+echo "Tests passed: $correct/$TOTAL_AMOUNT"
+
+percentage=$(awk "BEGIN {printf \"%.0f\", $correct/$TOTAL_AMOUNT*100}")
+echo "Percentage of tests passed: $percentage%"
+
+# if (( $(echo "$percentage >= 90" | bc -l) )); then
+if [[ $percentage -ge 90 ]]; then
+  echo "Grade: A"
+elif [[ $percentage -ge 80 ]]; then
+  echo "Grade: B"
+elif [[ $percentage -ge 70 ]]; then
+  echo "Grade: C"
+elif [[ $percentage -ge 60 ]]; then
+  echo "Grade: D"
+else
+  echo "Grade: F"
+fi
+
+echo "-----------------------------------------------------------------"
+echo ""

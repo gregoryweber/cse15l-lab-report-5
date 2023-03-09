@@ -18,6 +18,7 @@ public class TestListExamples {
     List<String> expected = Arrays.asList("a", "a", "b", "c", "d");
     assertEquals(expected, merged);
   }
+
   @Test(timeout = 500)
   public void testFilter() {
     List<String> testList = Arrays.asList("a", "b", "moon");
@@ -26,5 +27,14 @@ public class TestListExamples {
     List<String> expected = Arrays.asList("moon");
     assertEquals(expected, filtered);
   }
-  
+
+  @Test(timeout = 500)
+  public void testFilter2() {
+    List<String> testList = Arrays.asList("Moon", "b", "moon");
+    StringChecker sc = new IsMoon();
+    List<String> filtered = ListExamples.filter(testList, sc);
+    List<String> expected = Arrays.asList("Moon", "moon");
+    assertEquals(expected, filtered);
+  }
+
 }
